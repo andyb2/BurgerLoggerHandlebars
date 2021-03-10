@@ -1,0 +1,25 @@
+{
+  "name": "burgerloggerhandlebars",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andyb2/BurgerLoggerHandlebars.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andyb2/BurgerLoggerHandlebars/issues"
+  },
+  "homepage": "https://github.com/andyb2/BurgerLoggerHandlebars#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "handlebars": "^4.7.7"
+  },
+  "devDependencies": {},
+  "description": ""
+}
