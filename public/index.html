@@ -75,7 +75,6 @@
             });
         }
         listLoad();
-        console.log(id)
 
         async function removeBurger(id) {
 
@@ -86,8 +85,6 @@
             const deleteBurger = await fetch(`/api/index/${id}`, deleteRequest).then((r) => r.json());
             location.href = "./index.html";
         }
-
-        // function not working
 
         async function eatBurger(id) {
             const updateRequest = {
