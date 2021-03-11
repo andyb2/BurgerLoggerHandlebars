@@ -16,37 +16,88 @@
         <div class="row justify-content-center">
 
             <div class="col-4">
-                <ul class="list-group">
-                    <li class="list-group-item">An item</li>
-                    <li class="list-group-item">A second item</li>
-                    <li class="list-group-item">A third item</li>
-                    <li class="list-group-item">A fourth item</li>
-                    <li class="list-group-item">And a fifth one</li>
+                <ul class="list-group" id="firstList">
+
                 </ul>
             </div>
             <div class="col-4 text-center">
-                <label class="form-label" id="burger">Burger App</label>
+                <label class="form-label">Burger App</label>
                 <textarea class="form-control" id="burgerInput" rows="3"></textarea>
                 <button class="btn btn-primary my-2" onclick="submitBurger()">Submit</button>
             </div>
             <div class="col-4">
-                <ul class="list-group">
-                    <li class="list-group-item">An item</li>
-                    <li class="list-group-item">A second item</li>
-                    <li class="list-group-item">A third item</li>
-                    <li class="list-group-item">A fourth item</li>
-                    <li class="list-group-item">And a fifth one</li>
+                <ul class="list-group" id="secondList">
+
                 </ul>
             </div>
         </div>
     </div>
 
     <script>
-        function submitBurger() {
-            let burger = document.querySelector('#burgerInput').value
-            console.log(burger)
+        document.querySelector('#burgerInput').innerHTML = ''
+
+        async function submitBurger() {
+            data = {
+                title: document.querySelector('#burgerInput').value
+            }
+
+            let logInResult = await fetch("/api/index", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            }).then((r) => r.json())
+            listLoad();
+            location.href = "./index.html";
         }
 
+        async function listLoad() {
+            const getBurgerList = await fetch('/api/index').then((r) => r.json());
+            document.querySelector('#firstList').innerHTML = ""
+            getBurgerList.forEach(burger => {
+
+                if (burger.eaten === 0) {
+                    document.querySelector('#firstList').innerHTML += `
+                <li class="list-group-item">${burger.title}
+                    <button class="btn btn-primary" onclick="eatBurger(${burger.id})">Eat</button>
+                    <button class="btn btn-secondary" onclick="removeBurger(${burger.id})">Remove</button>
+                </li>
+                `
+                } else {
+                    document.querySelector('#secondList').innerHTML += `
+                <li class="list-group-item">${burger.title}
+                    <button class="btn btn-secondary" onclick="removeBurger(${burger.id})">Remove</button>
+                </li>
+                `
+                }
+
+            });
+        }
+        listLoad();
+        console.log(id)
+
+        async function removeBurger(id) {
+
+            const deleteRequest = {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+            }
+            const deleteBurger = await fetch(`/api/index/${id}`, deleteRequest).then((r) => r.json());
+            location.href = "./index.html";
+        }
+
+        // function not working
+
+        async function eatBurger(id) {
+            const updateRequest = {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+            }
+            const updateBurgerState = await fetch(`/api/index/${id}`, updateRequest).then((r) => r.json());
+            location.href = "./index.html";
+
+        }
     </script>
 </body>
 
