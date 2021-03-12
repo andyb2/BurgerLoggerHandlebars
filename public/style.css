@@ -1,0 +1,20 @@
+body {
+  background-color: rgb(221, 221, 221);
+}
+
+.list-group-item {
+  font-family: "Courier New", Courier, monospace;
+  text-align: center;
+}
+
+.burgerHeader,
+.eatenHeader {
+  text-align: center;
+}
+
+.groupOne {
+  color: Black;
+}
+.groupTwo {
+  color: red;
+}

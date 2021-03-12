@@ -1,7 +1,13 @@
 const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 5000;
-const db = require("./app/config/connection")("burger_db", "rootroot");
+
+const orm = require("./app/models/orm");
+const exphbs = require("express-handlebars");
+
+app.engine("handlebars", exphbs());
+app.set("view engine", "handlebars");
+
 // for parsing incoming POST data
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -11,34 +17,32 @@ app.use(express.static("public"));
 
 // for routes
 
-app.get("/", function (req, res) {
-  res.sendFile("./public/index.html");
+app.get("/", async function (req, res) {
+  let burgerList = await orm.getBurgers();
+  res.render("index", { data: burgerList });
 });
 
 app.get("/api/index", async (req, res) => {
-  let burgerList = await db.query(`SELECT * from burgers`);
+  let burgerList = await orm.getBurgers();
   res.send(burgerList);
 });
 
 app.post("/api/index", async (req, res) => {
   const burgerInput = req.body;
-  let dbInput = await db.query(
-    `INSERT INTO burgers (title, eaten) VALUES ('${burgerInput.title}', 0)`
-  );
+  let dbInput = await orm.insertBurger(burgerInput);
   res.send(dbInput);
 });
 
 app.delete("/api/index/:id", async (req, res) => {
   let id = req.params.id;
-  let dbDelete = await db.query(`DELETE FROM burgers WHERE id=${id};`);
-  res.send({ message: `Deleted ${id}` });
+  let dbDelete = await orm.removeBurger(id);
+  res.send(dbDelete);
 });
 
 app.put("/api/index/:id", async (req, res) => {
   let id = req.params.id;
-  console.log(id);
-  let updateDb = await db.query(`UPDATE burgers SET eaten=1 WHERE id=${id};`);
-  res.send({ message: `Updated ${id}` });
+  let updateDb = await orm.eatBurger(id);
+  res.send(updateDb);
 });
 
 app.listen(PORT, function () {

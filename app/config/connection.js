@@ -26,12 +26,10 @@ class Database {
 }
 
 function dbConnect(dbName, dbPassword) {
-  // at top INIT DB connection
   const db = new Database({
     host: "localhost",
     port: 3306,
     user: "root",
-    /*! please fill in your password; then create the database name below and create the table */
     password: "rootroot",
     database: "burger_db",
   });
